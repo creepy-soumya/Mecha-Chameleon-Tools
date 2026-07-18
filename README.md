@@ -113,41 +113,13 @@ and open the latest build directly — no need to revisit the Releases page manu
 ## Changelog
 
 ### v1.0.0
-- **Camouflage engine updated** — new authenticated session protocol replaces the old
-  loader-based injection (no more `bridge-loader.dll`). Dynamic port assignment,
-  per-instance staging with automatic cleanup of stale bridge folders.
-- **Config persistence fix** — settings now save next to the EXE when frozen, resolving
-  a silent write failure inside the PyInstaller bundle directory.
-- **ESP `bHidden` offset** updated for the latest game patch.
-- **Bridge status** in the Camouflage tab now reliably transitions from "checking" to
-  "Connected" or "Disconnected" (no more stuck label).
+- **Initial Major Release** — Fully external overlay tool for MECCA CHAMELEON.
+- **Advanced ESP** — Dot, Box, Corner Box, Skeleton, Snaplines, and role detection.
+- **Aimbot & Magnet Assist** — Configurable FOV, smoothing, and strength.
+- **Radar** — 2D minimap with range configuration.
+- **Camouflage System** — In-game mesh painting via bridge connection.
+- **Auto-Updater** — Automatically fetches the latest `.exe` from GitHub.
 
-### v1.9.1.1-beta
-- **UI redesign** — modern dark theme with accent palette, gradient controls, and a reorganized
-  card-based menu (sidebar icons, grouped sections, primary Save / danger Close buttons).
-- **ESP stability** — overlays now render from a coherent off-thread snapshot with player
-  persistence, eliminating flicker, lag, and players disappearing during fast movement.
-- **Localization** — added Russian (RU) and Turkish (TR); now 9 languages.
-- **Updater** — in-app update checker/downloader added; `meccha_chameleon_tools.spec` now tracked
-  so maintainers can rebuild.
-
-### v1.9.1-beta
-- In-app update checker/downloader.
-- Build spec tracked in repo.
-- Version source centralized in `updater.py`.
-
-### v1.9.0-beta
-- Camouflage reworked with a lighter bridge system (loader-based injection, port 50262).
-- Simplified camouflage UI (Start / Stop / Review / Unreview).
-- Native files moved into the `native/` subdirectory.
-
-### v1.8.1
-- Multi-language support (7 languages).
-- Coherent dark theme with styled combo box popup, sliders, and scrollbars.
-
-### v1.8.0
-- Role detection (Hunter/Survivor), enemy-only filter, corner box.
-- Visible/not-visible coloring, Load Config, END-key exit.
 
 ---
 
