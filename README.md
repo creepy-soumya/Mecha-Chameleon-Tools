@@ -61,11 +61,7 @@ and open the latest build directly — no need to revisit the Releases page manu
 2. Launch MECCA CHAMELEON (windowed / borderless).
 3. Run `Meccha Chameleon Tools.exe`.
 
-### From source
-```bash
-pip install -r requirements.txt
-python -m meccha_chameleon_tools
-```
+
 
 **Requirements:** Windows 10/11, game running in windowed or borderless mode.
 
@@ -157,22 +153,7 @@ Camouflage     → loader-based bridge injection (TCP, port 50262) for mesh pain
 
 ---
 
-## Building from Source
 
-```bash
-# 1. Build the native components (bridge DLL, injector, controller)
-pwsh -NoProfile -ExecutionPolicy Bypass -File runtime/scripts/build.ps1
-
-# 2. Copy bridge artifacts into the package
-Copy-Item "runtime\.build\bin\meccha-camouflage.exe" "meccha_chameleon_tools\meccha-camouflage.exe" -Force
-Copy-Item "runtime\.build\bin\runtime-bridge.dll"     "meccha_chameleon_tools\meccha-xenos-bridge.dll" -Force
-Copy-Item "runtime\.build\bin\runtime-injector.exe"   "meccha_chameleon_tools\meccha-xenos-injector.exe" -Force
-
-# 3. Bundle everything into a single executable
-pyinstaller --clean meccha_chameleon_tools.spec
-```
-
-Output: `dist/Meccha Chameleon Tools.exe`.
 
 ---
 
