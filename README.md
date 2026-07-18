@@ -1,8 +1,8 @@
 <div align="center">
 
-<img width="1582" height="1092" alt="Meccha Chameleon Tools" src="https://github.com/user-attachments/assets/e0dbeffe-b591-4bf5-9fc0-0f047a545c3d" />
+<img width="1582" height="1092" alt="Mecha Chameleon Tools" src="https://github.com/user-attachments/assets/e0dbeffe-b591-4bf5-9fc0-0f047a545c3d" />
 
-# Meccha Chameleon Tools
+# Mecha Chameleon Tools
 
 External ESP · Aimbot · Radar · Player Mod · Camouflage for **MECCA CHAMELEON** (UE5.6)
 
@@ -18,8 +18,7 @@ A fully **external** overlay tool for MECCA CHAMELEON. All gameplay reads happen
 memory (pymem) — nothing is injected into the game's code. The camouflage system is the
 only component that uses a small injected bridge DLL for in-game mesh painting.
 
-> **Status:** `1.9.1.1-beta` is a pre-release. Features are stable but the build is
-> published under the `-beta` channel so the in-app updater can deliver it to testers.
+> **Status:** `v1.0.0` is the latest stable release. The in-app updater will automatically deliver any future patches directly to you.
 
 ---
 
@@ -57,12 +56,9 @@ and open the latest build directly — no need to revisit the Releases page manu
 ## Quick Start
 
 ### Standalone (recommended — no Python required)
-1. Download **`Meccha Chameleon Tools.exe`** from the [latest release](../../releases/latest).
+1. Download **`Mecha-Chameleon-Tools.exe`** from the [latest release](https://github.com/creepy-soumya/Mecha-Chameleon-Tools/releases/latest).
 2. Launch MECCA CHAMELEON (windowed / borderless).
-3. Run `Meccha Chameleon Tools.exe`.
-
-
-
+3. Run `Mecha-Chameleon-Tools.exe`.
 **Requirements:** Windows 10/11, game running in windowed or borderless mode.
 
 ---
@@ -94,50 +90,7 @@ and open the latest build directly — no need to revisit the Releases page manu
 - **CAMOUFLAGE** — Paint, stop, review, and unreview your character mesh. Requires the game
   process running.
 
----
 
-## Package Structure
-
-```
-meccha_chameleon_tools/
-  __init__.py        Entry point
-  __main__.py        Module runner
-  config.py          Configuration + JSON save/load
-  core.py            Memory reading, ESP logic, role detection
-  translations.py    Multi-language (9 languages)
-  ui.py              Qt5 overlay + menu GUI
-  camouflage.py      Camouflage bridge controller
-  updater.py         In-app update checker/downloader
-  native/            Bridge DLL, loader DLL, injector EXE
-  mesh-profiles/     Mesh profile JSON configs
-```
-
----
-
-## Architecture
-
-```
-PatternScanner → GUObjectArray, FNamePool
-UObjectArray   → find_class, iter_objects
-OffsetResolver → dynamic property walking
-GameReader     → world, camera, players, role detection
-Overlay        → QPainter rendering loop (off-thread snapshot → paint)
-Menu           → PyQt5 settings window (tabs + in-app updater)
-Camouflage     → loader-based bridge injection (TCP, port 50262) for mesh painting
-```
-
-### Memory Access
-1. **Pattern scanning** locates GUObjectArray and FNamePool via signature matching.
-2. **Object walking** enumerates all UObjects to resolve engine class addresses.
-3. **Dynamic offset resolution** walks UStruct::ChildProperties → FField::Next at runtime.
-4. **ESP** builds a coherent off-thread snapshot, then projects player positions through the
-   camera view matrix on the paint thread.
-5. **Radar** projects positions relative to the local player onto a 2D minimap.
-6. **Aimbot / Magnet** read the camera and apply aim assist with configurable smoothing.
-7. **Camouflage** injects a bridge DLL (via loader + runtime-injector) and sends paint commands
-   over TCP on port 50262.
-
----
 
 ## Troubleshooting
 
