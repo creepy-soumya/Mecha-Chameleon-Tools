@@ -578,7 +578,7 @@ class Menu(QWidget):
                     bat_path = os.path.join(os.path.dirname(exe_path), "update_helper.bat")
                     with open(bat_path, "w") as f:
                         f.write('@echo off\n')
-                        f.write('timeout /t 2 /nobreak > NUL\n')
+                        f.write('ping 127.0.0.1 -n 4 > NUL\n')
                         if os.path.normpath(path) != os.path.normpath(exe_path):
                             f.write(f'move /Y "{path}" "{exe_path}" > NUL\n')
                         f.write(f'start "" "{exe_path}"\n')

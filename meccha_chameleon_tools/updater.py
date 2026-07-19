@@ -33,18 +33,19 @@ def _parse_version(text):
     if not text:
         return (0, 0, 0, 0)
     text = text.strip().lstrip("vV")
-    m = re.match(r"(\d+)(?:\.(\d+))?(?:\.(\d+))?(.*)", text)
+    m = re.match(r"(\d+)(?:\.(\d+))?(?:\.(\d+))?(?:\.(\d+))?(.*)", text)
     if not m:
-        return (0, 0, 0, 0)
+        return (0, 0, 0, 0, 0)
     major = int(m.group(1) or 0)
     minor = int(m.group(2) or 0)
     patch = int(m.group(3) or 0)
+    build = int(m.group(4) or 0)
     # Strip things like -beta, -alpha. If it's -final, treat it as a stable release (pre=1)
-    suffix = (m.group(4) or "").strip(" -_.").lower()
+    suffix = (m.group(5) or "").strip(" -_.").lower()
     if suffix == "final":
         suffix = ""
     pre = 0 if suffix else 1
-    return (major, minor, patch, pre)
+    return (major, minor, patch, build, pre)
 
 
 def is_newer(remote_version, current_version=APP_VERSION):
