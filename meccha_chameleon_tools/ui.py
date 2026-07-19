@@ -572,7 +572,21 @@ class Menu(QWidget):
         if path and os.path.exists(path):
             try:
                 import subprocess
-                subprocess.Popen(["explorer", "/select,", os.path.normpath(path)])
+                import sys
+                if getattr(sys, "frozen", False):
+                    exe_path = sys.executable
+                    bat_path = os.path.join(os.path.dirname(exe_path), "update_helper.bat")
+                    with open(bat_path, "w") as f:
+                        f.write('@echo off\n')
+                        f.write('timeout /t 2 /nobreak > NUL\n')
+                        if os.path.normpath(path) != os.path.normpath(exe_path):
+                            f.write(f'move /Y "{path}" "{exe_path}" > NUL\n')
+                        f.write(f'start "" "{exe_path}"\n')
+                        f.write('del "%~f0"\n')
+                    subprocess.Popen([bat_path], shell=True, creationflags=subprocess.CREATE_NO_WINDOW)
+                    sys.exit(0)
+                else:
+                    subprocess.Popen(["explorer", "/select,", os.path.normpath(path)])
             except Exception:
                 pass
 
@@ -595,7 +609,7 @@ class Menu(QWidget):
     def _on_update_downloaded(self, path):
         self._update_state = "done"
         self._downloaded_path = path
-        self._refresh_update_button()
+        self.update_btn.setText(_tr("Restart to Update"))
 
     def _switch_language(self, lang_code):
         self.config.language = lang_code
