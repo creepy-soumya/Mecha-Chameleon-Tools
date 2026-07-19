@@ -560,8 +560,8 @@ class Menu(QWidget):
                 def _cb(done, total):
                     pct = int(done * 100 / total) if total else 0
                     self._update_signals.progress.emit(pct)
-                updater.download_update(info["asset_url"], dest, _cb)
-                self._update_signals.downloaded.emit(dest)
+                actual_path = updater.download_update(info["asset_url"], dest, _cb)
+                self._update_signals.downloaded.emit(actual_path)
             except Exception as e:
                 self._update_signals.download_error.emit(str(e))
 
