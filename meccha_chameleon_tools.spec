@@ -48,7 +48,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='Meccha Chameleon Tools',
+    name='Mecha-Chameleon-Tools',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

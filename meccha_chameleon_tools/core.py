@@ -745,6 +745,10 @@ class MecchaESP:
                 is_enemy = True
             elif local_is_survivor and is_hunter:
                 is_enemy = True
+            elif role == "Unknown" or local_role == "Unknown":
+                # Fallback: treat unknown roles as enemies so their trackers don't disappear
+                is_enemy = True
+
             if enemy_only and not is_enemy:
                 continue
             
@@ -753,9 +757,9 @@ class MecchaESP:
             #   This avoids incorrectly filtering the last player when health offsets resolve
             #   late or when the game temporarily marks them as 0 during state transitions.
             # - Do NOT call _is_visible() here; it uses an unreliable offset that fires false
-            #   for the last living player in certain game states. Visibility is computed in
-            #   _build_snapshot purely for coloring purposes.
-            h, _ = self.get_health(pawn, ps)
+            # We removed the health check here because it was causing the last player to disappear
+            # in certain game states when health incorrectly reads as 0.
+
             yield {
                 "is_local": pawn == local_pawn,
                 "pos": pos,

@@ -1494,7 +1494,10 @@ class Overlay(QWidget):
         players = []
         for ps, tracked in list(self._tracked.items()):
             if ps in current:
-                players.append(current[ps])
+                # Merge fresh data into the tracked object so if role/team changes,
+                # it updates immediately rather than waiting for grace period to end.
+                tracked["data"].update(current[ps])
+                players.append(tracked["data"])
             elif now - tracked["last_seen"] <= self.PLAYER_GRACE_S:
                 players.append(tracked["data"])
             else:
@@ -1606,18 +1609,10 @@ class Overlay(QWidget):
                 color = self.config.local_color
             elif invincible:
                 color = self.config.invincible_color
-            elif is_hunter:
-                color = self.config.hunter_visual_color
-            elif is_survivor:
-                color = self.config.survivor_visual_color
+            elif is_enemy:
+                color = (255, 0, 0) # Strictly Red for enemies
             else:
-                if self.config.enemy_only:
-                    if pdata.get("visible"):
-                        color = self.config.visible_color
-                    else:
-                        color = self.config.not_visible_color
-                else:
-                    color = self.config.enemy_color
+                color = (0, 150, 255) # Strictly Blue for teammates
 
             dsx, dsy = clamp_screen(sx, sy - self.config.box_y_offset, w, h)
             dsy += self.config.box_y_offset

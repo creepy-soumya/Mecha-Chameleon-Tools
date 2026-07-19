@@ -18,7 +18,7 @@ A fully **external** overlay tool for MECCA CHAMELEON. All gameplay reads happen
 memory (pymem) — nothing is injected into the game's code. The camouflage system is the
 only component that uses a small injected bridge DLL for in-game mesh painting.
 
-> **Status:** `v1.0.0` is the latest stable release. The in-app updater will automatically deliver any future patches directly to you.
+> **Status:** `v1.0.3` is the latest stable release. The in-app updater will automatically deliver any future patches directly to you.
 
 ---
 
@@ -111,6 +111,12 @@ and open the latest build directly — no need to revisit the Releases page manu
 ---
 
 ## Changelog
+
+### v1.0.3
+- **Enemy Only Filter Fixed** — Unknown roles now default to Enemy so trackers don't disappear when roles fail to load.
+- **Last Player Visibility** — Removed health checks that incorrectly hid the last living player during game state transitions.
+- **Strict Color Coding** — Strictly enforced **Red** for Enemies and **Blue** for Teammates, overriding any confusing role-based colors.
+- **Instant Team Switch Updates** — Tracker colors now update instantly the moment a player switches teams, bypassing the ESP grace period.
 
 ### v1.0.0
 - **Initial Major Release** — Fully external overlay tool for MECCA CHAMELEON.
