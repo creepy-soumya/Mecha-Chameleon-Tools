@@ -143,5 +143,13 @@ def download_update(asset_url, dest_path,
                 downloaded += len(chunk)
                 if progress_cb:
                     progress_cb(downloaded, total)
-    os.replace(tmp_path, dest_path)
-    return dest_path
+    try:
+        os.replace(tmp_path, dest_path)
+        return dest_path
+    except PermissionError:
+        # Windows locks the running .exe, so we can't overwrite it directly.
+        # Fallback to saving it with a suffix.
+        base, ext = os.path.splitext(dest_path)
+        fallback_path = f"{base}_New{ext}"
+        os.replace(tmp_path, fallback_path)
+        return fallback_path
