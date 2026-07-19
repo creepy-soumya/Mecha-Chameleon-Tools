@@ -78,7 +78,7 @@ class Config:
     show_background_geo: bool = False
 
     # Show cursor
-    show_cursor: bool = False
+    show_cursor: bool = True
 
     # Aimbot
     aimbot_enabled: bool = False
