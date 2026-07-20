@@ -578,13 +578,16 @@ class Menu(QWidget):
                     bat_path = os.path.join(os.path.dirname(exe_path), "update_helper.bat")
                     with open(bat_path, "w") as f:
                         f.write('@echo off\n')
-                        f.write('ping 127.0.0.1 -n 4 > NUL\n')
+                        f.write(':loop\n')
+                        f.write('ping 127.0.0.1 -n 2 > NUL\n')
                         if os.path.normpath(path) != os.path.normpath(exe_path):
                             f.write(f'move /Y "{path}" "{exe_path}" > NUL\n')
+                            f.write('if errorlevel 1 goto loop\n')
                         f.write(f'start "" "{exe_path}"\n')
                         f.write('del "%~f0"\n')
-                    subprocess.Popen([bat_path], shell=True, creationflags=subprocess.CREATE_NO_WINDOW)
-                    sys.exit(0)
+                    subprocess.Popen([bat_path], creationflags=subprocess.CREATE_NO_WINDOW)
+                    import os
+                    os._exit(0)
                 else:
                     subprocess.Popen(["explorer", "/select,", os.path.normpath(path)])
             except Exception:
