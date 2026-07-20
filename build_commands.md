@@ -23,8 +23,28 @@ python -m pip install pyinstaller pymem PyQt5 pywin32
 ```
 
 ## 3. Build the Python Executable
-Once the dependencies are installed, run this command to build your `.exe` file. The output will be placed in the `dist` folder.
+
+**IMPORTANT:** Always use `build_release.py` to build — this bumps the version number in the code before compiling. NEVER run PyInstaller directly or the in-app version will stay as `1.0.0` forever.
+
+Replace `1.0.3.7` with the actual version you want to release:
 
 ```powershell
-python -m PyInstaller --clean meccha_chameleon_tools.spec
+python build_release.py 1.0.3.7
 ```
+
+This script will automatically:
+1. Update the version in `updater.py` to match the release tag
+2. Update the `.spec` output filename to `Mecha-Chameleon-Tools-v1.0.3.7.exe`
+3. Clean old build artifacts
+4. Run PyInstaller
+
+The final `.exe` will be in the `dist/` folder.
+
+## 4. After Build - Upload to GitHub
+
+Create a new GitHub Release with:
+- **Tag:** `v1.0.3.7`
+- **Asset 1:** `dist/Mecha-Chameleon-Tools-v1.0.3.7.exe`
+- **Asset 2 (optional):** `meccha_chameleon_tools/meccha-camouflage.exe`
+
+The in-app updater will then detect the new version and download the correct `.exe` automatically.
