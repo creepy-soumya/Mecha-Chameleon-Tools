@@ -1499,7 +1499,10 @@ class Overlay(QWidget):
                         bones = self.esp.get_skeleton_positions_by_indices(actor, cfg.bone_indices)
                     entry["bones"] = bones
                 # Always fetch health for death tracking, even if health_bar is disabled
-                entry["health"] = self.esp.get_health(actor, ps)
+                try:
+                    entry["health"] = self.esp.get_health(actor, ps)
+                except Exception:
+                    entry["health"] = None
 
                 current[ps] = entry
                 if ps not in self._tracked:
