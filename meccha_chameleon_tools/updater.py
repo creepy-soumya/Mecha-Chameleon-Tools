@@ -65,7 +65,7 @@ def _release_to_info(data):
     asset_size = 0
     for asset in data.get("assets", []) or []:
         name = asset.get("name", "")
-        if name.lower().endswith(".exe"):
+        if name.lower().endswith(".exe") and "camouflage" not in name.lower() and "injector" not in name.lower():
             asset_url = asset.get("browser_download_url")
             asset_name = name
             asset_size = asset.get("size", 0)
