@@ -372,6 +372,11 @@ def _build_tuning(config=None):
         "fill_color_b": _to_unit(b),
         "fill_metallic": getattr(config, "fill_metallic", 1.0) if config else 1.0,
         "fill_roughness": getattr(config, "fill_roughness", 0.0) if config else 0.0,
+        "paint_mode": getattr(config, "paint_mode", "Single") if config else "Single",
+        "paint_speed": getattr(config, "paint_speed", 5.0) if config else 5.0,
+        "server_batch_limit": getattr(config, "server_batch_limit", 100) if config else 100,
+        "server_batch_delay_ms": getattr(config, "server_batch_delay_ms", 50) if config else 50,
+        "adaptive_batching": getattr(config, "adaptive_batching", True) if config else True,
     }
 
 

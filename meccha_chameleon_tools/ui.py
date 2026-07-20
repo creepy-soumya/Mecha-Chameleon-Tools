@@ -1495,11 +1495,12 @@ class Overlay(QWidget):
                     if not bones:
                         bones = self.esp.get_skeleton_positions_by_indices(actor, cfg.bone_indices)
                     entry["bones"] = bones
-                if cfg.health_bar or cfg.shield_bar:
-                    entry["health"] = self.esp.get_health(actor, ps)
+                # Always fetch health for death tracking, even if health_bar is disabled
+                entry["health"] = self.esp.get_health(actor, ps)
 
                 current[ps] = entry
-                self._tracked[ps] = {"data": entry, "last_seen": now}
+                if ps not in self._tracked:
+                    self._tracked[ps] = {"data": entry, "last_seen": now, "dead_since": None}
         except Exception:
             pass
 
@@ -1511,11 +1512,24 @@ class Overlay(QWidget):
                 # Merge fresh data into the tracked object so if role/team changes,
                 # it updates immediately rather than waiting for grace period to end.
                 tracked["data"].update(current[ps])
-                players.append(tracked["data"])
-            elif now - tracked["last_seen"] <= self.PLAYER_GRACE_S:
-                players.append(tracked["data"])
-            else:
+                tracked["last_seen"] = now
+            elif now - tracked["last_seen"] > self.PLAYER_GRACE_S:
                 del self._tracked[ps]
+                continue
+            
+            # Death detection: gracefully hide enemies that have had 0 health for > 3 seconds
+            entry = tracked["data"]
+            h = entry.get("health")
+            if h and h[0] is not None and h[0] <= 0 and not entry.get("is_local"):
+                if not tracked.get("dead_since"):
+                    tracked["dead_since"] = now
+            else:
+                tracked["dead_since"] = None
+                
+            if tracked.get("dead_since") and (now - tracked["dead_since"] > 3.0):
+                continue
+                
+            players.append(entry)
 
         actors = []
         if cfg.draw_all:

@@ -9,6 +9,12 @@ Before running this, make sure you have installed the **Visual Studio Build Tool
 powershell -NoProfile -ExecutionPolicy Bypass -File runtime/scripts/build.ps1
 ```
 
+py bridge artifacts into the package
+Copy-Item "runtime\.build\bin\meccha-camouflage.exe" "meccha_chameleon_tools\meccha-camouflage.exe" -Force
+Copy-Item "runtime\.build\bin\runtime-bridge.dll"     "meccha_chameleon_tools\meccha-xenos-bridge.dll" -Force
+Copy-Item "runtime\.build\bin\runtime-injector.exe"   "meccha_chameleon_tools\meccha-xenos-injector.exe" -Force
+
+
 ## 2. Install Python Dependencies
 Install PyInstaller along with the modules required by the tool (such as `pymem`, `PyQt5`, and `pywin32`) to prevent hidden import errors during the build.
 

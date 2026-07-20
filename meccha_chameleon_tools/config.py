@@ -111,7 +111,7 @@ class Config:
     camouflage_enabled: bool = False
     camouflage_status: str = "Ready"
     # Paint mode: Single / Packed / Fast
-    paint_mode: str = "Packed"
+    paint_mode: str = "Single"
     paint_speed: float = 5.0
     # Paint geometry settings
     stroke_size_texels: float = 16.0
