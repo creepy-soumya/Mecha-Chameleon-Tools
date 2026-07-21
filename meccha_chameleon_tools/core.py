@@ -739,6 +739,9 @@ class MecchaESP:
             pos = self.get_actor_root_pos(pawn)
             if pos is None:
                 continue
+            # Filter out pawns at exactly world origin — these are despawned/spectator slots
+            if pos[0] == 0.0 and pos[1] == 0.0 and pos[2] == 0.0:
+                continue
             role, is_hunter, is_survivor = self._detect_role(pawn)
             is_enemy = False
             if local_is_hunter and is_survivor:
@@ -746,10 +749,12 @@ class MecchaESP:
             elif local_is_survivor and is_hunter:
                 is_enemy = True
             elif role == "Unknown" or local_role == "Unknown":
-                # Fallback: treat unknown roles as enemies so their trackers don't disappear
+                # Fallback: treat unknown roles as enemies so last player is always shown
                 is_enemy = True
 
-            if enemy_only and not is_enemy:
+            # Never filter Unknown-role players with enemy_only — they might be real enemies
+            # whose class name hasn’t resolved yet (happens with last surviving enemy).
+            if enemy_only and not is_enemy and role != "Unknown":
                 continue
             
             # Guard: only skip a pawn if we have strong evidence they're dead/despawned.
