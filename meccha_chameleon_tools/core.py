@@ -557,8 +557,23 @@ class MecchaESP:
         root = rp(self.pm, actor + self.offsets["AActor::RootComponent"])
         if not root:
             return None
-        # Use Bounds.Origin which is a world-space position. Bounds is located at 0x140 in UE5.
-        return rvec3(self.pm, root + 0x140)
+        # FBoxSphereBounds.Origin is FVector (3 x float = 12 bytes) at offset 0x140.
+        # Note: rvec3 reads double (8 bytes each) — use rvec3_f for float FVectors.
+        try:
+            pos = rvec3_f(self.pm, root + 0x140)
+        except Exception:
+            pos = (0.0, 0.0, 0.0)
+        # If Bounds.Origin is zero (uninitialized or spectator), fall back to RelativeLocation.
+        if pos[0] == 0.0 and pos[1] == 0.0 and pos[2] == 0.0:
+            rel_off = self.offsets.get("USceneComponent::RelativeLocation", 0)
+            if rel_off:
+                try:
+                    pos = rvec3_f(self.pm, root + rel_off)
+                except Exception:
+                    pos = (0.0, 0.0, 0.0)
+        if pos[0] == 0.0 and pos[1] == 0.0 and pos[2] == 0.0:
+            return None
+        return pos
 
     def get_actor_root_rotation(self, actor):
         """Read root component relative rotation (pitch, yaw, roll in degrees)."""
