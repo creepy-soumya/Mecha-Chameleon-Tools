@@ -383,10 +383,21 @@ def _build_tuning(config=None):
 def paint_now(config=None) -> dict:
     game = getattr(config, "game_process_name", GAME_PROCESS) if config else GAME_PROCESS
     pid = _find_game_pid(game)
+    mode = (getattr(config, "paint_mode", "Single") if config else "Single") or "Single"
+    # Map paint_mode to bridge route and apply_mode
+    if mode == "Fast":
+        route = "f10_fast_fill"
+        apply_mode = "fast_fill"
+    elif mode == "Packed":
+        route = "f10_mesh_first_paint"
+        apply_mode = "mesh_first_paint"
+    else:  # Single (default, most compatible)
+        route = "f10_single_stroke"
+        apply_mode = "single_stroke"
     payload = {
         "type": "paint_full_route",
-        "native_apply_mode": "mesh_first_paint",
-        "route": "f10_mesh_first_paint",
+        "native_apply_mode": apply_mode,
+        "route": route,
         "preview_only": False,
         "unpreview_only": False,
         "research_artifacts": False,

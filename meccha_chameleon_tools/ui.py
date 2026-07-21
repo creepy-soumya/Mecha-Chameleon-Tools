@@ -1138,6 +1138,32 @@ class Menu(QWidget):
         lo.addWidget(self.lbl_bridge_status)
 
         card, clo = self._card(spacing=8)
+
+        # Paint mode selector
+        mode_row = QHBoxLayout()
+        mode_lbl = QLabel(_tr("Paint Mode:"))
+        mode_lbl.setStyleSheet(f"color: {self.C['text']}; font-size: 11px;")
+        mode_row.addWidget(mode_lbl)
+        from PyQt5.QtWidgets import QComboBox
+        self._paint_mode_combo = QComboBox()
+        self._paint_mode_combo.addItems(["Single", "Packed", "Fast"])
+        current_mode = getattr(self.config, "paint_mode", "Single") or "Single"
+        idx = self._paint_mode_combo.findText(current_mode)
+        if idx >= 0:
+            self._paint_mode_combo.setCurrentIndex(idx)
+        self._paint_mode_combo.setStyleSheet(
+            f"QComboBox {{ background-color: {self.C['surface2']}; color: {self.C['text']}; "
+            f"border: 1px solid {self.C['border2']}; padding: 4px 8px; border-radius: 6px; font-size: 11px; }}"
+            f"QComboBox::drop-down {{ border: none; }}"
+            f"QComboBox QAbstractItemView {{ background-color: {self.C['surface2']}; color: {self.C['text']}; "
+            f"selection-background-color: {self.C['accent']}; }}"
+        )
+        self._paint_mode_combo.currentTextChanged.connect(
+            lambda v: setattr(self.config, "paint_mode", v)
+        )
+        mode_row.addWidget(self._paint_mode_combo)
+        clo.addLayout(mode_row)
+
         for text, color, cmd in [
             (_tr("Start Painting"), self.C["good"], self._on_paint_now),
             (_tr("Stop Painting"), self.C["bad"], self._on_stop_camo),
