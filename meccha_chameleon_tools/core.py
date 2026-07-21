@@ -742,13 +742,15 @@ class MecchaESP:
             pawn = rp(self.pm, ps + self.offsets["APlayerState::PawnPrivate"])
             if not pawn:
                 continue
+            # Validate pawn is a real spawned UObject — invalid/stale entries in PlayerArray
+            # have garbage pawn pointers whose class name cannot be resolved (returns "").
+            pawn_class = self.objects.class_name(pawn)
+            if not pawn_class:
+                continue
             if not include_local and pawn == local_pawn:
                 continue
             pos = self.get_actor_root_pos(pawn)
             if pos is None:
-                continue
-            # Filter out pawns at exactly world origin — these are despawned/spectator slots
-            if pos[0] == 0.0 and pos[1] == 0.0 and pos[2] == 0.0:
                 continue
             role, is_hunter, is_survivor = self._detect_role(pawn)
             is_enemy = False
